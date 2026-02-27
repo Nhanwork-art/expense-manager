@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<a href="{% url 'add' %}" class="btn btn-primary mb-3">
+Thêm chi tiêu
+</a>
+
+<div class="row">
+
+<div class="col-md-4">
+<div class="card bg-success text-white">
+<div class="card-body">
+Tổng thu: {{ total_income }}
+</div>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card bg-danger text-white">
+<div class="card-body">
+Tổng chi: {{ total_expense }}
+</div>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card bg-primary text-white">
+<div class="card-body">
+Số dư: {{ balance }}
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="card mt-4">
+    <div class="card-body text-center">
+
+        <h5>Thống kê thu chi</h5>
+
+        <div style="width:300px; height:300px; margin:auto;">
+            <canvas id="chart"></canvas>
+        </div>
+
+    </div>
+</div>
+
+<table class="table mt-4">
+
+<tr>
+
+<th>Tên</th>
+<th>Số tiền</th>
+<th>Loại</th>
+<th></th>
+
+</tr>
+
+{% for expense in expenses %}
+
+<tr>
+
+<td>{{ expense.title }}</td>
+
+<td>{{ expense.amount }}</td>
+
+<td>{{ expense.type }}</td>
+
+<td>
+
+<a href="{% url 'edit' expense.id %}"
+class="btn btn-warning btn-sm">
+Edit
+</a>
+
+<a href="{% url 'delete' expense.id %}"
+class="btn btn-danger btn-sm">
+Delete
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const ctx =
+document.getElementById('chart');
+
+new Chart(ctx, {
+
+type: 'pie',
+
+data: {
+
+labels: ['Thu', 'Chi'],
+
+datasets: [{
+
+data: [
+{{ total_income }},
+{{ total_expense }}
+]
+
+}]
+
+}
+
+});
+
+</script>
+
+{% endblock %}
